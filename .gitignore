@@ -97,3 +97,6 @@ packaged.yaml
 local_audit.db
 *.db
 .claude/scheduled_tasks.lock
+# Frontend source files
+!frontend/src/lib/
+!frontend/src/lib/**
