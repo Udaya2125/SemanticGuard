@@ -45,81 +45,50 @@ const VaultPage: React.FC = () => {
 
       {!isLoading && !error && (
         <>
-          <div className="stat-grid">
-            <div className="stat-card">
-              <div className="stat-card-icon"><Icon name="database" size={16} /></div>
-              <div className="stat-card-value">{documents.length}</div>
-              <div className="stat-card-label">Protected Documents</div>
+          <div className="registry-summary">
+            <div className="band">
+              <span className="band-label">Protected Documents</span>
+              <span className="band-value mono">{documents.length}</span>
             </div>
-            <div className="stat-card">
-              <div className="stat-card-icon"><Icon name="layers" size={16} /></div>
-              <div className="stat-card-value">{documents.length}</div>
-              <div className="stat-card-label">Records Indexed</div>
+            <div className="band">
+              <span className="band-label">Records Indexed</span>
+              <span className="band-value mono">{documents.length}</span>
             </div>
-            <div className="stat-card">
-              <div className="stat-card-icon"><Icon name="brain" size={16} /></div>
-              <div className="stat-card-value mono" style={{ fontSize: 15 }}>MiniLM-L6-v2</div>
-              <div className="stat-card-label">Embedding Index · FAISS Flat L2</div>
+            <div className="band">
+              <span className="band-label">Embedding Index</span>
+              <span className="band-value mono">MiniLM-L6-v2 · FAISS Flat L2</span>
             </div>
-            <div className="stat-card">
-              <div className="stat-card-icon"><Icon name="tag" size={16} /></div>
-              <div className="stat-card-value">{uniqueLineageTags}</div>
-              <div className="stat-card-label">Lineage Tags Tracked</div>
+            <div className="band">
+              <span className="band-label">Lineage Tags</span>
+              <span className="band-value mono">{uniqueLineageTags}</span>
             </div>
           </div>
 
           {documents.length === 0 ? (
             <EmptyState icon="database" title="No protected documents" description="The vault directory is empty or failed to index." />
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div>
               {documents.map((doc) => (
-                <div key={doc.document_id} className="card card-pad">
+                <div key={doc.document_id} className="rule-section registry-entry">
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
-                    <div style={{ display: 'flex', gap: 12 }}>
-                      <div
-                        style={{
-                          width: 36,
-                          height: 36,
-                          borderRadius: 9,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          background: 'var(--accent-soft)',
-                          color: 'var(--accent-strong)',
-                          flexShrink: 0,
-                        }}
-                      >
-                        <Icon name="lock" size={16} />
-                      </div>
-                      <div>
-                        <div style={{ fontSize: 14.5, fontWeight: 600, color: 'var(--text-primary)' }}>{doc.type}</div>
-                        <div className="mono" style={{ fontSize: 11.5, color: 'var(--text-tertiary)', marginTop: 2 }}>
-                          {doc.document_id}
-                        </div>
-                      </div>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
+                      <Icon name="lock" size={13} className="text-tertiary" />
+                      <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)' }}>{doc.type}</span>
+                      <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-tertiary)' }}>{doc.document_id}</span>
                     </div>
-                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                      <span className="badge badge-block">
-                        <Icon name="shield-alert" size={10} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, fontWeight: 600, letterSpacing: '0.04em', color: 'var(--status-block)' }}>
+                        <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--status-block)' }} />
                         {doc.classification}
                       </span>
-                      <span className="badge badge-allow">
-                        <Icon name="search" size={10} />
-                        Semantic Indexed
-                      </span>
-                      <span className="badge badge-neutral">
-                        <Icon name="tag" size={10} />
-                        {doc.lineage_tag}
-                      </span>
+                      <span className="mono" style={{ fontSize: 11.5, color: 'var(--text-tertiary)' }}>{doc.lineage_tag}</span>
                     </div>
                   </div>
 
-                  <div className="divider" style={{ margin: '16px 0' }} />
-
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px 24px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '14px 24px', marginTop: 18 }}>
                     {Object.entries(doc.content).map(([key, value]) => (
                       <div key={key}>
-                        <div className="eyebrow" style={{ marginBottom: 3 }}>{key.replace(/_/g, ' ')}</div>
+                        <div className="eyebrow" style={{ marginBottom: 4 }}>{key.replace(/_/g, ' ')}</div>
                         <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{String(value)}</div>
                       </div>
                     ))}

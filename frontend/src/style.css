@@ -3,78 +3,91 @@
    Enterprise AI security console theme.
    =========================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
   /* Surfaces */
-  --bg-base: #08090d;
-  --bg-canvas: #0b0d13;
-  --bg-surface: #12141c;
-  --bg-surface-raised: #171a24;
-  --bg-surface-hover: #1c202c;
-  --bg-inset: #0d0f16;
+  --bg-base: #08090b;
+  --bg-canvas: #0a0c0e;
+  --bg-surface: #121417;
+  --bg-surface-raised: #171a1e;
+  --bg-surface-hover: #1c2024;
+  --bg-inset: #0d0f11;
 
   /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-default: rgba(255, 255, 255, 0.09);
-  --border-strong: rgba(255, 255, 255, 0.14);
+  --border-subtle: rgba(255, 255, 255, 0.055);
+  --border-default: rgba(255, 255, 255, 0.085);
+  --border-strong: rgba(255, 255, 255, 0.13);
 
   /* Text */
-  --text-primary: #f3f4f8;
-  --text-secondary: #9a9dae;
-  --text-tertiary: #666a7c;
-  --text-disabled: #454858;
+  --text-primary: #eef0f2;
+  --text-secondary: #98a0a8;
+  --text-tertiary: #62696f;
+  --text-disabled: #42474c;
 
-  /* Accent — electric blue / violet, Aivar-inspired */
-  --accent: #4f7dff;
-  --accent-strong: #6d90ff;
-  --accent-soft: rgba(79, 125, 255, 0.12);
-  --accent-border: rgba(79, 125, 255, 0.35);
-  --accent-2: #8b7bff;
-  --accent-2-soft: rgba(139, 123, 255, 0.12);
+  /* Accent — single restrained steel-blue, used sparingly and intentionally.
+     No secondary/violet accent — one accent color only. */
+  --accent: #4a7ab8;
+  --accent-strong: #6493cf;
+  --accent-soft: rgba(74, 122, 184, 0.11);
+  --accent-border: rgba(74, 122, 184, 0.32);
 
-  /* Status */
-  --status-allow: #2fd48a;
-  --status-allow-soft: rgba(47, 212, 138, 0.12);
-  --status-allow-border: rgba(47, 212, 138, 0.32);
+  /* Status — muted, desaturated. Meaning over decoration. */
+  --status-allow: #5ea88a;
+  --status-allow-soft: rgba(94, 168, 138, 0.11);
+  --status-allow-border: rgba(94, 168, 138, 0.3);
 
-  --status-block: #f6516a;
-  --status-block-soft: rgba(246, 81, 106, 0.12);
-  --status-block-border: rgba(246, 81, 106, 0.34);
+  --status-block: #c1615f;
+  --status-block-soft: rgba(193, 97, 95, 0.12);
+  --status-block-border: rgba(193, 97, 95, 0.32);
 
-  --status-review: #f5a742;
-  --status-review-soft: rgba(245, 167, 66, 0.12);
-  --status-review-border: rgba(245, 167, 66, 0.32);
+  --status-review: #bd9256;
+  --status-review-soft: rgba(189, 146, 86, 0.12);
+  --status-review-border: rgba(189, 146, 86, 0.3);
 
-  --status-neutral: #6b7284;
-  --status-neutral-soft: rgba(107, 114, 132, 0.14);
+  --status-neutral: #676e75;
+  --status-neutral-soft: rgba(103, 110, 117, 0.13);
 
-  /* Shadows / glow */
+  /* Shadows — restrained. Glow is a hint, not a light source. */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
-  --glow-accent: 0 0 0 1px rgba(79, 125, 255, 0.25), 0 0 24px rgba(79, 125, 255, 0.12);
-  --glow-block: 0 0 0 1px rgba(246, 81, 106, 0.25), 0 0 28px rgba(246, 81, 106, 0.1);
-  --glow-allow: 0 0 0 1px rgba(47, 212, 138, 0.22), 0 0 28px rgba(47, 212, 138, 0.09);
+  --glow-accent: 0 0 0 1px rgba(74, 122, 184, 0.28), 0 0 10px rgba(74, 122, 184, 0.06);
+  --glow-block: 0 0 0 1px rgba(193, 97, 95, 0.3), 0 0 12px rgba(193, 97, 95, 0.05);
+  --glow-allow: 0 0 0 1px rgba(94, 168, 138, 0.26), 0 0 12px rgba(94, 168, 138, 0.045);
 
   /* Radii */
   --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 18px;
+  --radius-md: 9px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
   --radius-full: 999px;
 
   /* Type */
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
 
   /* Motion */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-fast: 120ms;
   --dur-base: 200ms;
   --dur-slow: 360ms;
+  --dur-slower: 560ms;
 
   color-scheme: dark;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ---------- Reset ---------- */
@@ -99,9 +112,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /* Atmospheric depth kept deliberately near-invisible at rest: a single
+     faint tonal wash plus a fine 48px grid, both far below the threshold of
+     conscious attention. No moving parts — this is texture, not decoration. */
   background-image:
-    radial-gradient(ellipse 900px 500px at 12% -10%, rgba(79, 125, 255, 0.07), transparent 60%),
-    radial-gradient(ellipse 700px 500px at 100% 0%, rgba(139, 123, 255, 0.05), transparent 55%);
+    radial-gradient(ellipse 1100px 600px at 18% -8%, rgba(74, 122, 184, 0.035), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.012) 0px, rgba(255, 255, 255, 0.012) 1px, transparent 1px, transparent 48px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.012) 0px, rgba(255, 255, 255, 0.012) 1px, transparent 1px, transparent 48px);
   background-attachment: fixed;
 }
 
@@ -403,6 +420,27 @@ textarea {
   animation: fade-in var(--dur-base) var(--ease) both;
 }
 
+/* ---------- Orchestrated page-load stagger ----------
+   Applied to the shell's own top-level sections (sidebar, header, content),
+   never to individual child widgets — a handful of deliberate steps, not a
+   cascade of independently-animated components. */
+.stagger-1 { animation-delay: 0ms; }
+.stagger-2 { animation-delay: 60ms; }
+.stagger-3 { animation-delay: 120ms; }
+.stagger-4 { animation-delay: 180ms; }
+
+/* ---------- Decision settle ----------
+   A single restrained pulse when a security decision resolves — not a loop,
+   not a flash, just a brief confirmation that state has changed. */
+@keyframes decision-settle {
+  0% { box-shadow: 0 0 0 0 var(--settle-color, transparent); }
+  40% { box-shadow: 0 0 0 4px var(--settle-color, transparent); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.decision-settle {
+  animation: decision-settle 640ms var(--ease-out) both;
+}
+
 /* ---------- Spinner ---------- */
 .spinner {
   width: 14px;
@@ -446,6 +484,10 @@ textarea.text-input {
   outline: none;
   border-color: var(--accent-border);
   box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.text-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* ---------- Table ---------- */
@@ -509,119 +551,351 @@ textarea.text-input {
   outline-offset: 2px;
 }
 
-/* ---------- Pipeline visualization ---------- */
+/* ---------- Pipeline visualization ----------
+   A connected analytical system, not a row of cards: one continuous rule
+   with a marker per stage. During processing a small signal travels along
+   the rule up to the active stage; on completion the rule and markers
+   settle into their final state. Reduced motion removes the travel, not
+   the state information. */
 .pipeline {
-  display: flex;
-  align-items: stretch;
-  gap: 0;
-  overflow-x: auto;
-  padding: 4px 2px;
+  position: relative;
+  padding-top: 3px;
+}
+
+/* Absolutely positioned at the markers' vertical center (marker is 10px,
+   starting 3px from .pipeline's top -> center at 8px). Two elements, not
+   pixel-matched per stage, so this stays robust to content changes. */
+.pipeline-rule {
+  position: absolute;
+  top: 8px;
+  left: 5px;
+  right: 5px;
+  height: 1px;
+  background: var(--border-default);
+}
+.pipeline-rule-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  background: var(--status-allow-border);
+  transition: width var(--dur-slower) var(--ease-out);
+}
+.pipeline-rule-signal {
+  position: absolute;
+  top: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-strong);
+  box-shadow: 0 0 8px 2px rgba(100, 147, 207, 0.5);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+.pipeline-rule-signal.is-traveling {
+  opacity: 1;
+  animation: signal-travel 1.3s var(--ease) infinite;
+}
+/* One-shot burst used when a specific new stage has just resolved — the
+   backend response is already known at this point; this only paces its
+   reveal for legibility, it never claims progress ahead of the real data. */
+.pipeline-rule-signal.is-traveling-once {
+  opacity: 1;
+  animation: signal-travel 420ms var(--ease-out) both;
+}
+@keyframes signal-travel {
+  0% { left: var(--signal-start, 0%); opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { left: var(--signal-end, 100%); opacity: 0; }
+}
+
+.pipeline-stages {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
 }
 
 .pipeline-stage {
-  flex: 1 1 0;
-  min-width: 148px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 14px 15px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-default);
-  background: var(--bg-inset);
-  transition: border-color var(--dur-base) var(--ease), background var(--dur-base) var(--ease),
-    box-shadow var(--dur-base) var(--ease);
+  min-width: 0;
 }
 
-.pipeline-stage-icon {
-  width: 26px;
-  height: 26px;
-  border-radius: 7px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-surface-raised);
-  border: 1px solid var(--border-default);
-  color: var(--text-tertiary);
-  flex-shrink: 0;
+.pipeline-marker {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--bg-inset);
+  border: 1.5px solid var(--border-strong);
+  margin-bottom: 14px;
+  transition: background var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease),
+    box-shadow var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
 }
 
 .pipeline-stage-title {
-  font-size: 12.5px;
+  font-size: 11px;
   font-weight: 600;
-  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  transition: color var(--dur-base) var(--ease);
+  margin-bottom: 6px;
 }
 
 .pipeline-stage-detail {
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--text-tertiary);
-  line-height: 1.4;
-  min-height: 16px;
+  line-height: 1.45;
+  min-height: 34px;
 }
 
-.pipeline-stage.is-pending {
-  opacity: 0.55;
-}
-
-.pipeline-stage.is-running {
-  border-color: var(--accent-border);
-  background: var(--accent-soft);
-  box-shadow: var(--glow-accent);
-}
-.pipeline-stage.is-running .pipeline-stage-icon {
-  background: transparent;
-  border-color: transparent;
-  color: var(--accent-strong);
+.pipeline-stage.is-running .pipeline-marker {
+  border-color: var(--accent-strong);
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  transform: scale(1.15);
 }
 .pipeline-stage.is-running .pipeline-stage-title {
-  color: var(--text-primary);
+  color: var(--accent-strong);
 }
 
-.pipeline-stage.is-complete {
-  border-color: var(--status-allow-border);
-  background: rgba(47, 212, 138, 0.05);
-}
-.pipeline-stage.is-complete .pipeline-stage-icon {
-  background: var(--status-allow-soft);
-  border-color: var(--status-allow-border);
-  color: var(--status-allow);
+.pipeline-stage.is-complete .pipeline-marker {
+  border-color: var(--status-allow);
+  background: var(--status-allow);
 }
 .pipeline-stage.is-complete .pipeline-stage-title {
-  color: var(--text-primary);
+  color: var(--text-secondary);
 }
 .pipeline-stage.is-complete .pipeline-stage-detail {
   color: var(--text-secondary);
 }
 
-.pipeline-stage.is-error {
-  border-color: var(--status-block-border);
-  background: var(--status-block-soft);
+.pipeline-stage.is-error .pipeline-marker {
+  border-color: var(--status-block);
+  background: var(--status-block);
 }
-.pipeline-stage.is-error .pipeline-stage-icon {
-  background: var(--status-block-soft);
-  border-color: var(--status-block-border);
+.pipeline-stage.is-error .pipeline-stage-title {
   color: var(--status-block);
 }
 
-.pipeline-connector {
-  flex: 0 0 20px;
-  align-self: center;
-  height: 1px;
-  background: var(--border-default);
-  position: relative;
-  transition: background var(--dur-base) var(--ease);
-}
-.pipeline-connector.is-active {
-  background: var(--status-allow-border);
+@media (max-width: 900px) {
+  .pipeline-stages {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 18px;
+  }
+  .pipeline-rule {
+    display: none;
+  }
 }
 
-@media (max-width: 900px) {
-  .pipeline {
-    flex-direction: column;
+/* ===========================================================
+   Layout architecture — used instead of wrapping everything in
+   .card. Three intentional patterns: rule-separated sections
+   (most content), a framed workspace (the 1-2 focal instruments
+   per page), and bands (label-column + content-column strips for
+   metadata-dense areas like audit rows and vault documents).
+   =========================================================== */
+
+.rule-section {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 22px;
+}
+.rule-section + .rule-section {
+  margin-top: 30px;
+}
+
+.workspace {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+}
+
+.band {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.band:last-child {
+  border-bottom: none;
+}
+.band-label {
+  flex: 0 0 148px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.band-value {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+/* ---------- Score meter ----------
+   An instrument, not a progress bar: thin ruler, quarter ticks, a large
+   monospace numeral. The count-up animation lives in ScoreBar.tsx; this is
+   purely the visual language. */
+.score-meter-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+.score-meter-value {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  line-height: 1;
+}
+.score-meter-track {
+  position: relative;
+  height: 2px;
+  background: var(--border-default);
+}
+.score-meter-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  height: 100%;
+  transition: width var(--dur-slow) var(--ease-out);
+}
+.score-meter-ticks {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+}
+.score-meter-ticks span {
+  width: 1px;
+  height: 5px;
+  margin-top: -1.5px;
+  background: var(--border-strong);
+}
+
+/* ---------- Sidebar nav: left-rule active state, not a filled pill ---------- */
+.nav-item {
+  position: relative;
+}
+.nav-item::before {
+  content: '';
+  position: absolute;
+  left: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 0;
+  background: var(--accent-strong);
+  transition: height var(--dur-base) var(--ease);
+}
+.nav-item.active::before {
+  height: 16px;
+}
+
+/* ---------- Scan atmosphere ----------
+   Invisible at rest. While the pipeline is actively analyzing, a faint
+   horizontal scan line sweeps the analysis workspace once per pass — a
+   hint that something is processing, not a screensaver. Removed entirely
+   under reduced motion. */
+.scan-field {
+  position: relative;
+  overflow: hidden;
+}
+.scan-field::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 45%;
+  top: -45%;
+  background: linear-gradient(180deg, transparent, rgba(100, 147, 207, 0.05), transparent);
+  pointer-events: none;
+  opacity: 0;
+}
+.scan-field.is-active::after {
+  opacity: 1;
+  animation: scan-sweep 2.4s linear infinite;
+}
+@keyframes scan-sweep {
+  0% { top: -45%; }
+  100% { top: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scan-field.is-active::after {
+    display: none;
   }
-  .pipeline-connector {
-    flex: 0 0 16px;
-    width: 1px;
-    height: 16px;
-    margin-left: 13px;
-  }
+}
+
+/* ---------- Entry animation ----------
+   Mounted once at the App root, torn down for good once its sequence
+   completes — see components/EntryAnimation.tsx for lifecycle. Exit is a
+   JS-toggled class + CSS transition, not a keyframe-timed unmount, so
+   there's no race between "animation looks done" and "actually unmounted". */
+.entry-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-base);
+  opacity: 1;
+  transition: opacity 320ms var(--ease);
+}
+.entry-overlay.is-exiting {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.entry-trace {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 46px;
+  background: linear-gradient(180deg, transparent, var(--accent-strong), transparent);
+  transform: translate(-50%, -50%) scaleY(0.2);
+  opacity: 0;
+  animation: entry-trace-in 520ms var(--ease-out) 80ms both;
+}
+@keyframes entry-trace-in {
+  0% { opacity: 0; transform: translate(-50%, -50%) scaleY(0.2); }
+  45% { opacity: 1; }
+  100% { opacity: 0.3; transform: translate(-50%, -50%) scaleY(1); }
+}
+
+.entry-mark-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.entry-word {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  opacity: 0;
+  animation: entry-word-in 620ms var(--ease-out) 360ms both;
+}
+@keyframes entry-word-in {
+  from { opacity: 0; letter-spacing: 0.4em; }
+  to { opacity: 1; letter-spacing: 0.01em; }
+}
+
+.entry-sub {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  opacity: 0;
+  animation: entry-fade-up 420ms var(--ease-out) 720ms both;
+}
+@keyframes entry-fade-up {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }

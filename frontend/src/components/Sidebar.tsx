@@ -24,18 +24,21 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ active, onNavigate, alertCount }) => {
-  const health = useBackendHealth();
+  const { status: health, provider } = useBackendHealth();
 
-  // The vault index, Gemini clients, and Fact Judge are all constructed as
-  // singletons at backend process import time — before /health can even be
-  // served. So a successful health check implies all three initialized
-  // without raising. We label these as "Initialized" rather than "Connected"
-  // since we don't spend a live Gemini call just to paint a status light.
+  // The vault index and the configured LLM provider's client are both
+  // constructed as singletons at backend process import time — before
+  // /health can even be served. So a successful health check implies both
+  // initialized without raising. We label the provider as "Initialized"
+  // rather than "Connected" since we don't spend a live LLM call just to
+  // paint a status light — and the provider name itself is the real value
+  // from settings.LLM_PROVIDER, never hardcoded.
   const dotClass = health === 'online' ? 'online' : health === 'checking' ? 'checking' : 'offline';
   const statusLabel = health === 'online' ? 'Online' : health === 'checking' ? 'Checking…' : 'Offline';
+  const providerLabel = provider ? provider.charAt(0).toUpperCase() + provider.slice(1) : 'Provider';
 
   return (
-    <aside className="sidebar">
+    <aside className="sidebar reveal stagger-1">
       <div className="sidebar-brand">
         <div className="sidebar-brand-mark">
           <Icon name="shield-check" size={17} strokeWidth={2} />
@@ -78,7 +81,7 @@ const Sidebar: React.FC<SidebarProps> = ({ active, onNavigate, alertCount }) => 
           <div className="status-row">
             <span className="label">
               <span className={`status-dot ${dotClass}`} />
-              Gemini Client
+              {providerLabel} Client
             </span>
             <span>{health === 'online' ? 'Initialized' : '—'}</span>
           </div>

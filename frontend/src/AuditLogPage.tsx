@@ -3,7 +3,7 @@ import Icon from './components/Icon';
 import DecisionBadge from './components/DecisionBadge';
 import { LoadingState, ErrorState, EmptyState } from './components/States';
 import { fetchAuditLogs, type TestResponse } from './lib/api';
-import { similarityFromScore, toPercent, titleCaseDocId, truncate } from './lib/format';
+import { similarityFromScore, toPercent, titleCaseDocId, truncate, formatTimestamp, maskIp, formatMs, displayAgentOutput } from './lib/format';
 
 type FilterAction = 'ALL' | 'ALLOW' | 'BLOCK' | 'REVIEW';
 
@@ -88,12 +88,13 @@ const AuditLogPage: React.FC = () => {
                 <table className="data-table">
                   <thead>
                     <tr>
+                      <th>Timestamp</th>
                       <th>Query</th>
-                      <th>Agent Mode</th>
+                      <th>Mode</th>
                       <th>Decision</th>
-                      <th>Similarity</th>
-                      <th>Fact Confidence</th>
-                      <th>Matched Document</th>
+                      <th>Lineage</th>
+                      <th>Source</th>
+                      <th>Processing</th>
                       <th>Request ID</th>
                       <th />
                     </tr>
@@ -108,7 +109,8 @@ const AuditLogPage: React.FC = () => {
                             style={{ cursor: 'pointer' }}
                             onClick={() => setExpandedId(isOpen ? null : log.request_id)}
                           >
-                            <td className="truncate" style={{ maxWidth: 260, color: 'var(--text-primary)' }}>
+                            <td className="mono" style={{ fontSize: 11.5, whiteSpace: 'nowrap' }}>{formatTimestamp(log.timestamp)}</td>
+                            <td className="truncate" style={{ maxWidth: 220, color: 'var(--text-primary)' }}>
                               {log.query}
                             </td>
                             <td>
@@ -117,9 +119,9 @@ const AuditLogPage: React.FC = () => {
                             <td>
                               <DecisionBadge action={log.decision.action} size="sm" />
                             </td>
-                            <td>{similarity === null ? '—' : toPercent(similarity)}</td>
-                            <td>{log.fact_judge.is_derived ? toPercent(log.fact_judge.confidence) : '—'}</td>
-                            <td>{log.semantic.matched_document_id ? titleCaseDocId(log.semantic.matched_document_id) : '—'}</td>
+                            <td className="mono" style={{ fontSize: 11.5 }}>{log.lineage_tag ?? '—'}</td>
+                            <td className="mono" style={{ fontSize: 11.5 }}>{maskIp(log.requester_ip)}</td>
+                            <td className="mono" style={{ fontSize: 11.5, whiteSpace: 'nowrap' }}>{formatMs(log.processing_ms)}</td>
                             <td className="mono" style={{ fontSize: 11.5 }}>{truncate(log.request_id, 8)}</td>
                             <td>
                               <Icon name={isOpen ? 'chevron-down' : 'chevron-right'} size={14} className="text-tertiary" />
@@ -127,12 +129,30 @@ const AuditLogPage: React.FC = () => {
                           </tr>
                           {isOpen && (
                             <tr>
-                              <td colSpan={8} style={{ background: 'var(--bg-inset)', padding: '16px 18px' }}>
+                              <td colSpan={9} style={{ background: 'var(--bg-inset)', padding: '16px 18px' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                                   <div>
                                     <div className="eyebrow" style={{ marginBottom: 6 }}>Agent Output</div>
                                     <div style={{ fontSize: 12.5, color: 'var(--text-secondary)', whiteSpace: 'pre-wrap' }}>
-                                      {log.agent_output}
+                                      {displayAgentOutput(log.agent_output)}
+                                    </div>
+                                  </div>
+                                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '10px 24px' }}>
+                                    <div>
+                                      <div className="eyebrow" style={{ marginBottom: 4 }}>Similarity</div>
+                                      <div style={{ fontSize: 12.5, color: 'var(--text-primary)' }}>{similarity === null ? '—' : toPercent(similarity)}</div>
+                                    </div>
+                                    <div>
+                                      <div className="eyebrow" style={{ marginBottom: 4 }}>Fact Confidence</div>
+                                      <div style={{ fontSize: 12.5, color: 'var(--text-primary)' }}>{log.fact_judge.is_derived ? toPercent(log.fact_judge.confidence) : '—'}</div>
+                                    </div>
+                                    <div>
+                                      <div className="eyebrow" style={{ marginBottom: 4 }}>Matched Document</div>
+                                      <div style={{ fontSize: 12.5, color: 'var(--text-primary)' }}>{log.semantic.matched_document_id ? titleCaseDocId(log.semantic.matched_document_id) : '—'}</div>
+                                    </div>
+                                    <div>
+                                      <div className="eyebrow" style={{ marginBottom: 4 }}>Full Request ID</div>
+                                      <div className="mono" style={{ fontSize: 11.5, color: 'var(--text-primary)' }}>{log.request_id}</div>
                                     </div>
                                   </div>
                                   <div>

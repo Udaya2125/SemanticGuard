@@ -71,12 +71,17 @@ class LocalSqliteAudit(AuditProvider):
         try:
             cursor = self.conn.cursor()
             cursor.execute(
-                "SELECT event_data FROM audit_events ORDER BY timestamp DESC LIMIT ? OFFSET ?",
+                "SELECT event_data, timestamp FROM audit_events ORDER BY timestamp DESC LIMIT ? OFFSET ?",
                 (limit, offset)
             )
             rows = cursor.fetchall()
             for row in rows:
                 event_data = json.loads(row['event_data'])
+                # Records logged before the `timestamp` field existed on
+                # TestResponse won't have it in the stored JSON — backfill
+                # from this table's own DB-assigned timestamp column rather
+                # than leaving it blank or inventing one.
+                event_data.setdefault('timestamp', row['timestamp'])
                 events.append(TestResponse(**event_data))
             return events
         except sqlite3.Error as e:

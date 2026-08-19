@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Icon from './components/Icon';
 import DecisionBadge from './components/DecisionBadge';
 import type { TestResponse } from './lib/api';
-import { similarityFromScore, toPercent, truncate, titleCaseDocId } from './lib/format';
+import { similarityFromScore, toPercent, truncate, titleCaseDocId, formatTimestamp, maskIp, displayAgentOutput } from './lib/format';
 
 interface ResultDisplayProps {
   result: TestResponse & { error?: string };
@@ -48,6 +48,9 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result }) => {
             {similarity !== null && ` · ${toPercent(similarity)} similarity`}
           </div>
         </div>
+        <span className="mono" style={{ fontSize: 11, color: 'var(--text-tertiary)', whiteSpace: 'nowrap' }}>
+          {formatTimestamp(result.timestamp)}
+        </span>
         <span className="mono" style={{ fontSize: 11, color: 'var(--text-disabled)' }}>
           {truncate(result.request_id, 8)}
         </span>
@@ -71,7 +74,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result }) => {
                   wordBreak: 'break-word',
                 }}
               >
-                {result.agent_output}
+                {displayAgentOutput(result.agent_output)}
               </div>
             </div>
 
@@ -98,6 +101,18 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result }) => {
                 <div className="eyebrow" style={{ marginBottom: 4 }}>Processing</div>
                 <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>
                   {result.processing_ms.toFixed(0)}ms
+                </div>
+              </div>
+              <div>
+                <div className="eyebrow" style={{ marginBottom: 4 }}>Timestamp</div>
+                <div className="mono" style={{ fontSize: 12, fontWeight: 500, color: 'var(--text-primary)' }}>
+                  {formatTimestamp(result.timestamp)}
+                </div>
+              </div>
+              <div>
+                <div className="eyebrow" style={{ marginBottom: 4 }}>Source</div>
+                <div className="mono" style={{ fontSize: 12, fontWeight: 500, color: 'var(--text-primary)' }}>
+                  {maskIp(result.requester_ip)}
                 </div>
               </div>
             </div>

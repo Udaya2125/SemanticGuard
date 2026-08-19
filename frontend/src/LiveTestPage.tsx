@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Icon from './components/Icon';
 import SecurityDecisionCard from './components/SecurityDecisionCard';
-import PipelineVisualization, { type PipelineStatus } from './components/PipelineVisualization';
+import PipelineVisualization, { PIPELINE_SETTLE_MS, type PipelineStatus } from './components/PipelineVisualization';
 import AgentOutputCard from './components/AgentOutputCard';
 import DetectionExplanation from './components/DetectionExplanation';
 import { runSecurityTest, type TestResponse } from './lib/api';
@@ -24,18 +24,31 @@ const LiveTestPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const { byId: vaultById } = useVaultIndex();
-  const health = useBackendHealth();
+  const { status: health } = useBackendHealth();
+
+  // Monotonic request sequence: a response is only ever applied to UI state
+  // if it belongs to the most recently dispatched request. This is
+  // defense-in-depth — mode/query are also locked while a request is
+  // in flight (below) so a user can't even create two competing intents —
+  // but if any future change reintroduces concurrent requests, an older,
+  // slower response can never clobber a newer one's result.
+  const requestSeqRef = useRef(0);
 
   const handleRun = async () => {
     if (!query.trim() || status === 'running') return;
+    const seq = ++requestSeqRef.current;
+    const submittedMode = mode;
+    const submittedQuery = query.trim();
     setStatus('running');
     setErrorMessage(null);
     setResult(null);
     try {
-      const data = await runSecurityTest(mode, query.trim());
+      const data = await runSecurityTest(submittedMode, submittedQuery);
+      if (requestSeqRef.current !== seq) return; // superseded by a newer request
       setResult(data);
       setStatus('complete');
     } catch (err) {
+      if (requestSeqRef.current !== seq) return;
       setErrorMessage(err instanceof Error ? err.message : 'Unknown error');
       setStatus('error');
     }
@@ -47,6 +60,28 @@ const LiveTestPage: React.FC = () => {
       handleRun();
     }
   };
+
+  // Orchestrated result reveal: the pipeline settles first, then Decision,
+  // then Agent Output, then Detection Explanation — real data the whole
+  // way, this only paces when each already-known piece appears rather than
+  // dumping everything on screen the instant the response lands.
+  const [revealStage, setRevealStage] = useState(0);
+  useEffect(() => {
+    if (status !== 'complete' || !result) {
+      setRevealStage(0);
+      return;
+    }
+    const STEP = 170;
+    const timers = [1, 2, 3].map((stage) =>
+      window.setTimeout(() => setRevealStage(stage), PIPELINE_SETTLE_MS + 100 + (stage - 1) * STEP)
+    );
+    return () => timers.forEach((t) => window.clearTimeout(t));
+  }, [status, result]);
+
+  // While the response has arrived but hasn't reached its scheduled reveal
+  // moment yet, the decision card is still told "running" — an honest
+  // pacing of real data, not a fabricated intermediate state.
+  const decisionStatus: PipelineStatus = status === 'complete' && revealStage < 1 ? 'running' : status;
 
   return (
     <div className="fade-in">
@@ -68,111 +103,98 @@ const LiveTestPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="live-test-grid">
-        {/* LEFT: Agent Request */}
-        <div className="card card-pad" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-            <Icon name="terminal" size={15} className="text-tertiary" />
-            <span className="eyebrow">Agent Request</span>
-          </div>
-
-          <div>
-            <label className="field-label" htmlFor="query">Question</label>
+      {/* Request — one workspace, not two cards */}
+      <div className={`workspace request-workspace scan-field${status === 'running' ? ' is-active' : ''}`}>
+        <div className="request-grid">
+          <div className="request-input-col">
+            <label className="field-label" htmlFor="query">Query</label>
             <textarea
               id="query"
               className="text-input"
-              rows={4}
+              rows={3}
               placeholder="Ask the agent something…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
+              disabled={status === 'running'}
             />
-          </div>
-
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {EXAMPLE_QUERIES.map((q) => (
-              <button
-                key={q}
-                className="btn btn-ghost btn-sm"
-                style={{ border: '1px solid var(--border-default)', fontWeight: 500 }}
-                onClick={() => setQuery(q)}
-              >
-                {q}
-              </button>
-            ))}
-          </div>
-
-          <div>
-            <span className="field-label">Agent Behavior</span>
-            <div className="segmented">
-              {MODES.map((m) => (
-                <button key={m} className={mode === m ? 'active' : ''} onClick={() => setMode(m)}>
-                  {m}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>
+              {EXAMPLE_QUERIES.map((q) => (
+                <button
+                  key={q}
+                  className="btn btn-ghost btn-sm"
+                  style={{ border: '1px solid var(--border-default)', fontWeight: 500 }}
+                  onClick={() => setQuery(q)}
+                  disabled={status === 'running'}
+                >
+                  {q}
                 </button>
               ))}
             </div>
           </div>
 
-          <button
-            className="btn btn-primary"
-            style={{ padding: '13px 20px', fontSize: 14, marginTop: 4 }}
-            onClick={handleRun}
-            disabled={status === 'running' || !query.trim()}
-          >
-            {status === 'running' ? (
-              <>
-                <span className="spinner" />
-                Running…
-              </>
-            ) : (
-              <>
-                <Icon name="shield-check" size={15} />
-                Run Security Check
-              </>
-            )}
-          </button>
-        </div>
-
-        {/* RIGHT: Security Decision */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-            <Icon name="shield" size={15} className="text-tertiary" />
-            <span className="eyebrow">Security Decision</span>
-          </div>
-          <SecurityDecisionCard status={status} result={result} vaultById={vaultById} />
-        </div>
-      </div>
-
-      {/* Pipeline visualization */}
-      <div style={{ marginTop: 28 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 14 }}>
-          <Icon name="activity" size={15} className="text-tertiary" />
-          <span className="eyebrow">Detection Pipeline</span>
-        </div>
-        <div className="card card-pad">
-          <PipelineVisualization status={status} result={result} />
-        </div>
-      </div>
-
-      {(status === 'complete' || status === 'error') && (
-        <div style={{ marginTop: 28, display: 'flex', flexDirection: 'column', gap: 28 }}>
-          {status === 'error' && errorMessage && (
-            <div className="card card-pad" style={{ borderColor: 'var(--status-block-border)', background: 'var(--status-block-soft)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <Icon name="wifi-off" size={16} style={{ color: 'var(--status-block)' }} />
-                <span style={{ fontSize: 13, color: 'var(--text-primary)', fontWeight: 600 }}>Request failed</span>
-              </div>
-              <p style={{ fontSize: 12.5, color: 'var(--text-secondary)', marginTop: 8 }}>{errorMessage}</p>
+          <div className="request-control-col">
+            {/* Locked while a request is in flight — this is the actual fix for the
+                "mode says X but result shows Y" confusion: it's now impossible to
+                change intent while an earlier request you already fired is still
+                resolving, rather than allowing it and hoping the UI explains itself. */}
+            <span className="field-label">
+              Agent Behavior
+              {status === 'running' && <span style={{ color: 'var(--text-disabled)', fontWeight: 500 }}> · locked</span>}
+            </span>
+            <div className="segmented" style={{ display: 'flex', opacity: status === 'running' ? 0.5 : 1 }}>
+              {MODES.map((m) => (
+                <button
+                  key={m}
+                  className={mode === m ? 'active' : ''}
+                  onClick={() => setMode(m)}
+                  disabled={status === 'running'}
+                  style={{ flex: 1 }}
+                >
+                  {m}
+                </button>
+              ))}
             </div>
-          )}
-          {result && (
-            <>
-              <AgentOutputCard result={result} />
-              <DetectionExplanation result={result} vaultById={vaultById} />
-            </>
-          )}
+
+            <button
+              className="btn btn-primary"
+              style={{ padding: '13px 20px', fontSize: 14, marginTop: 'auto' }}
+              onClick={handleRun}
+              disabled={status === 'running' || !query.trim()}
+            >
+              {status === 'running' ? (
+                <>
+                  <span className="spinner" />
+                  Analyzing
+                </>
+              ) : (
+                <>
+                  <Icon name="shield-check" size={15} />
+                  Run Security Check
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Pipeline */}
+      <div className="rule-section">
+        <span className="eyebrow" style={{ display: 'block', marginBottom: 18 }}>Detection Pipeline</span>
+        <PipelineVisualization status={status} result={result} />
+      </div>
+
+      {/* Decision */}
+      <SecurityDecisionCard status={decisionStatus} result={result} vaultById={vaultById} />
+
+      {status === 'error' && errorMessage && (
+        <div className="rule-section" style={{ borderTopColor: 'var(--status-block-border)' }}>
+          <p style={{ fontSize: 12.5, color: 'var(--text-secondary)' }}>{errorMessage}</p>
         </div>
       )}
+
+      {result && revealStage >= 2 && <AgentOutputCard result={result} />}
+      {result && revealStage >= 3 && <DetectionExplanation result={result} vaultById={vaultById} />}
     </div>
   );
 };

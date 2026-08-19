@@ -29,4 +29,6 @@ class TestResponse(BaseModel):
     decision: DecisionDetails = Field(..., description="The final decision made by the engine.")
     lineage_tag: Optional[str] = Field(None, description="The lineage tag of the matched protected data, if any.")
     processing_ms: float = Field(..., description="Total processing time in milliseconds.")
+    timestamp: Optional[str] = Field(None, description="UTC ISO-8601 timestamp of when the backend received the request. Additive field, absent on historical records predating it.")
+    requester_ip: Optional[str] = Field(None, description="Client IP captured server-side from the connection (or a trusted proxy header, only if explicitly configured). Absent on historical records predating it.")
 

@@ -19,12 +19,19 @@ GROQ_BASE_URL = "https://api.groq.com/openai/v1"
 # and Fact Judge input, so it's stripped before the answer is returned.
 # Non-greedy + DOTALL so multiline blocks are matched fully, and multiple
 # blocks are each removed independently rather than one match spanning
-# across them. A no-op if no <think> block is present.
+# across them. A no-op if no <think> tag is present at all.
 _THINK_BLOCK_RE = re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE)
+# Defends against a response truncated mid-reasoning (e.g. hit max_tokens
+# before emitting </think>): if an opening tag survives the pass above with
+# no matching close, drop everything from that tag onward rather than
+# leaking a half-finished reasoning trace as the "answer".
+_UNCLOSED_THINK_RE = re.compile(r"<think>.*", re.DOTALL | re.IGNORECASE)
 
 
 def _strip_think_block(text: str) -> str:
-    return _THINK_BLOCK_RE.sub("", text)
+    stripped = _THINK_BLOCK_RE.sub("", text)
+    stripped = _UNCLOSED_THINK_RE.sub("", stripped)
+    return stripped
 
 
 class GroqAgent(AgentProvider):

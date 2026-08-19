@@ -30,6 +30,10 @@ export interface TestResponse {
   decision: DecisionDetails;
   lineage_tag: string | null;
   processing_ms: number;
+  // Additive fields — absent (undefined) on records logged before this field
+  // existed on the backend. Always treat as optional, never assume presence.
+  timestamp?: string | null;
+  requester_ip?: string | null;
 }
 
 export interface VaultDocument {
@@ -68,9 +72,13 @@ export async function fetchAuditLogs(limit = 100, offset = 0): Promise<TestRespo
   return res.json();
 }
 
-export async function checkHealth(): Promise<boolean> {
+export interface HealthDetails {
+  status: string;
+  llm_provider?: string;
+}
+
+export async function fetchHealth(): Promise<HealthDetails | null> {
   const res = await fetch(`${API_BASE}/health`);
-  if (!res.ok) return false;
-  const data = await res.json();
-  return data?.status === 'ok';
+  if (!res.ok) return null;
+  return res.json();
 }

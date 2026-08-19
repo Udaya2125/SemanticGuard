@@ -40,6 +40,13 @@ class Settings(BaseSettings):
 
     FRONTEND_ORIGIN: str = "http://localhost:5173"
 
+    # If the app is deployed behind a reverse proxy/load balancer that you
+    # control and that sets X-Forwarded-For correctly, set this to true to
+    # capture the real client IP from that header instead of the proxy's own
+    # connection IP. Defaults to false — never trust X-Forwarded-For from an
+    # untrusted/unknown network path.
+    TRUST_PROXY_HEADERS: bool = False
+
     # AWS Configuration
     AWS_REGION: str = "us-east-1"
     DYNAMODB_TABLE: str = "semantic-guard-audit"

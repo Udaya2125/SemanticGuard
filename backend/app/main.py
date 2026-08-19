@@ -29,7 +29,10 @@ def read_root():
 
 @app.get("/health", tags=["Monitoring"])
 def health_check():
-    return {"status": "ok"}
+    # llm_provider reflects the actual configured provider (see
+    # app/detection/service.py's provider-selection wiring) — never
+    # hardcode a vendor name in the frontend for this.
+    return {"status": "ok", "llm_provider": settings.LLM_PROVIDER}
 
 # Include the API routers
 app.include_router(test_endpoints.router, prefix="/api", tags=["Testing"])
