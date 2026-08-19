@@ -1,0 +1,13 @@
+{
+  "document_id": "employee_002",
+  "type": "Employee Record",
+  "classification": "CONFIDENTIAL",
+  "lineage_tag": "HR-PII-002",
+  "content": {
+    "name": "Ananya Singh",
+    "department": "Marketing",
+    "salary_inr": 1620000,
+    "manager": "Vikram Reddy",
+    "performance_review": "Exceeds expectations, strong candidate for promotion."
+  }
+}

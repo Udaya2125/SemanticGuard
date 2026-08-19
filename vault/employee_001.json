@@ -1,0 +1,13 @@
+{
+  "document_id": "employee_001",
+  "type": "Employee Record",
+  "classification": "CONFIDENTIAL",
+  "lineage_tag": "HR-PII-001",
+  "content": {
+    "name": "Rahul Kumar",
+    "department": "Engineering",
+    "salary_inr": 1850000,
+    "manager": "Priya Sharma",
+    "termination_date": "2026-03-16"
+  }
+}

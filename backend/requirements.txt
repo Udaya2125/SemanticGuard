@@ -1,0 +1,16 @@
+# Backend Requirements
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-dotenv
+mangum
+
+# LLM and Embeddings
+openai
+sentence-transformers
+torch
+
+# Vector Search
+faiss-cpu
+numpy

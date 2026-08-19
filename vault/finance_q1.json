@@ -1,0 +1,13 @@
+{
+  "document_id": "finance_q1_2026",
+  "type": "Financial Record",
+  "classification": "STRICTLY_CONFIDENTIAL",
+  "lineage_tag": "FIN-Q126-001",
+  "content": {
+    "quarter": "Q1 2026",
+    "revenue_inr": 500000000,
+    "expenses_inr": 350000000,
+    "profit_inr": 150000000,
+    "internal_notes": "Revenue exceeded projections by 15% due to strong performance of Project 'Phoenix'. Expense control remains critical."
+  }
+}
