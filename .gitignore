@@ -100,6 +100,10 @@ local_audit.db
 # Frontend source files
 !frontend/src/lib/
 !frontend/src/lib/**
+<<<<<<< HEAD
+=======
+# Local/planning documentation
+# Local/planning documentation
 DEMO.md
 DEPLOYMENT.md
 CLAUDE_REVIEW_FILE_MAP.md
