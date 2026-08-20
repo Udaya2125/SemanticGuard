@@ -100,3 +100,9 @@ local_audit.db
 # Frontend source files
 !frontend/src/lib/
 !frontend/src/lib/**
+DEMO.md
+DEPLOYMENT.md
+CLAUDE_REVIEW_FILE_MAP.md
+geminiversion.md
+semanticguard.md
+template.yaml
